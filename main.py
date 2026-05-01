@@ -13,10 +13,14 @@ app = FastAPI(title="AI Chatbot API")
 
 # 配置
 OPENAI_API_KEY = os.getenv("OPENAI_API_KEY", "your-api-key-here")
-OPENAI_MODEL = os.getenv("OPENAI_MODEL", "gpt-4")
+OPENAI_MODEL = os.getenv("OPENAI_MODEL", "deepseek-chat")
+OPENAI_API_BASE = os.getenv("OPENAI_API_BASE", "https://api.deepseek.com/v1")
 
-# 初始化 OpenAI 客户端
-client = AsyncOpenAI(api_key=OPENAI_API_KEY)
+# 初始化 OpenAI 客户端（支持 DeepSeek）
+client = AsyncOpenAI(
+    api_key=OPENAI_API_KEY,
+    base_url=OPENAI_API_BASE
+)
 
 # 请求/响应模型
 class Message(BaseModel):
@@ -50,7 +54,7 @@ async def root():
     <div class="container">
         <div class="chat-header">
             <h1>🤖 AI 聊天机器人</h1>
-            <p>基于 OpenAI GPT-4 的智能对话系统</p>
+            <p>基于 DeepSeek 的智能对话系统</p>
         </div>
 
         <div class="chat-container" id="chat-container">
