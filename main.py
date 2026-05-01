@@ -67,16 +67,56 @@ async def root():
 
         <div class="input-area">
             <textarea id="user-input" placeholder="输入你的消息..."></textarea>
-            <button id="send-btn" onclick="sendMessage()">发送</button>
+            <button id="send-btn">发送</button>
         </div>
     </div>
 
     <script>
         const chatContainer = document.getElementById('chat-container');
         const userInput = document.getElementById('user-input');
+        const sendBtn = document.getElementById('send-btn');
 
         // 聊天历史
         let history = [];
+
+        // 发送消息函数
+        async function sendMessage() {
+            const message = userInput.value.trim();
+            if (!message) return;
+
+            // 显示用户消息
+            addMessageToChat('user', message);
+            userInput.value = '';
+
+            // 显示加载状态
+            const loadingId = addLoadingToChat();
+
+            try {
+                const response = await fetch('/api/chat', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        message: message,
+                        history: history
+                    })
+                });
+
+                const data = await response.json();
+
+                // 移除加载状态
+                document.getElementById(loadingId).remove();
+
+                // 显示机器人回复
+                addMessageToChat('bot', data.response);
+
+                // 更新历史
+                history = data.history;
+
+            } catch (error) {
+                document.getElementById(loadingId).remove();
+                addMessageToChat('bot', '抱歉，发生错误：' + error.message);
+            }
+        }
 
         // 回车发送消息
         userInput.addEventListener('keypress', function(e) {
@@ -86,8 +126,8 @@ async def root():
             }
         });
 
-        // 发送消息
-        async function sendMessage() {
+        // 按钮点击发送
+        sendBtn.addEventListener('click', sendMessage);
             const message = userInput.value.trim();
             if (!message) return;
 
