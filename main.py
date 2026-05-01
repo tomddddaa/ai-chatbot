@@ -7,6 +7,10 @@ from pydantic import BaseModel
 from typing import List, Optional
 import asyncio
 from openai import AsyncOpenAI
+from dotenv import load_dotenv
+
+# 加载 .env 文件
+load_dotenv()
 
 # 初始化 FastAPI
 app = FastAPI(title="AI Chatbot API")
