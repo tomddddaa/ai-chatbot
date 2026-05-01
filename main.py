@@ -104,7 +104,10 @@ async def root():
                 const data = await response.json();
 
                 // 移除加载状态
-                document.getElementById(loadingId).remove();
+                if (loadingId) {
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+                }
 
                 // 显示机器人回复
                 addMessageToChat('bot', data.response);
@@ -113,7 +116,10 @@ async def root():
                 history = data.history;
 
             } catch (error) {
-                document.getElementById(loadingId).remove();
+                if (loadingId) {
+                    const loadingEl = document.getElementById(loadingId);
+                    if (loadingEl) loadingEl.remove();
+                }
                 addMessageToChat('bot', '抱歉，发生错误：' + error.message);
             }
         }
@@ -399,6 +405,9 @@ async def chat(request: ChatRequest):
         return ChatResponse(response=ai_response, history=updated_history)
 
     except Exception as e:
+        import traceback
+        print(f"Error: {e}")
+        print(traceback.format_exc())
         raise HTTPException(status_code=500, detail=str(e))
 
 if __name__ == "__main__":
