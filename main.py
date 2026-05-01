@@ -159,7 +159,7 @@ async def root():
 
         // 格式化内容（处理换行）
         function formatContent(content) {
-            return content.replace(/\n/g, '<br>');
+            return content.replace(/\\n/g, '<br>').replace(/\\r/g, '');
         }
 
         // 滚动到底部
