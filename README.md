@@ -23,7 +23,7 @@
 ### 1. 克隆项目
 
 ```bash
-git clone https://github.com/your-username/ai-chatbot.git
+git clone https://github.com/tomddddaa/ai-chatbot.git
 cd ai-chatbot
 ```
 
